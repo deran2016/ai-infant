@@ -18,6 +18,7 @@
         <p class="quiz_content">
           {{ problems[now].problem.split(problems[now].answer)[0] }}
           <span
+            v-show="problems[now].problem.split(problems[now].answer).length > 1"
             :class="{blind: blind, answer: correct}"
           >
             {{ problems[now].answer }}
@@ -29,27 +30,54 @@
             v-for="(item, key) in problems[now].list"
             :id="item"
             :key="key"
-            :class="{check: correct && (problems[now].answer === item)}"
+            :class="{check: correct && (problems[now].answer === item),
+                     imgbtn: isImageType,
+                     hover: true}"
             outlined
             rounded
-            style="width: 25%; font-size: 3vw; padding: 4vw; margin: 0 auto;"
+            style="margin-right: 4px; margin-bottom: 10px; font-size: 2vw;"
             @click="checkAnswer(problems[now], item)"
           >
-            {{ numbering(key + 1) + ' ' + item }}
+            <span v-show="!isImageType">
+              {{ numbering(key + 1) + ' ' + item }}
+            </span>
+            <img
+              v-show="isImageType"
+              :src="isImageType ? require(`@/assets/img/${item}`) : ''"
+              height="60"
+            />
           </v-btn>
         </div>
       </div>
       <img
         class="quiz_img"
-        :src="require('@/assets/img/퀴즈선생님.png')"
-        height="250"
+        :src="teacherImg"
+        height="185"
       />
     </v-card-text>
+
+    <v-card-actions>
+      <v-btn
+        v-if="isComplete"
+        outlined
+        rounded
+        style="width: 20%; font-size: 30px; padding: 30px; margin-left: 120px"
+        color="primary"
+        @click="submit"
+      >
+        <img
+          :src="require('@/assets/img/다음.png')"
+          height="60"
+        />
+      </v-btn>
+    </v-card-actions>
   </v-card>
 </template>
 
 <script>
 /* eslint-disable import/no-unresolved */
+/* eslint-disable import/no-extraneous-dependencies */
+/* eslint-disable global-require */
 import { setTimeout } from 'timers';
 
 export default {
@@ -57,10 +85,33 @@ export default {
     now: 0,
     blind: true,
     correct: false,
+    isComplete: false,
+    teacherImg: null,
+    imgs: [
+      require('@/assets/img/퀴즈3번1.png'),
+      require('@/assets/img/퀴즈3번2.png'),
+      require('@/assets/img/퀴즈3번3.png'),
+    ],
     problems: [{
       problem: '손에 물기때문에 얼음이 달라붙는다',
       answer: '물기',
       list: ['물기', '붙기', '돌기'],
+    }, {
+      problem: '우리나라 3살 나무의 나이테는 3개이다.',
+      answer: '3개',
+      list: ['1개', '3개', '5개'],
+    }, {
+      problem: '다음중 더운 곳에 사는 식물의 잎은?',
+      answer: '퀴즈3번1.png',
+      list: ['퀴즈3번1.png', '퀴즈3번2.png', '퀴즈3번3.png'],
+    }, {
+      problem: '열대지방의 나무들은 나이테가 어떻게 생겼을까?',
+      answer: '없다',
+      list: ['뾰족한 모양', '네모 모양', '없다'],
+    }, {
+      problem: '얼음이 손에 달라 붙었다가 왜 금방 떨어질까?',
+      answer: '피부가 따뜻해서 얼음이 녹는다.',
+      list: ['피부가 차가워서 얼음이 떨어진다.', '피부가 따뜻해서 얼음이 녹는다.', '피부가 부드러워서 얼음이 떨어진다.'],
     }],
   }),
 
@@ -68,14 +119,41 @@ export default {
     condition() {
       return this.$store.state.data.experimentType;
     },
+    isImageType() {
+      let check = false;
+      if (this.problems[this.now].answer.indexOf('.png') > 0) {
+        check = true;
+      } else {
+        check = false;
+      }
+      return check;
+    },
   },
 
   mounted() {
+    this.preloadImg();
+    this.initTeacherImg();
   },
 
   methods: {
     submit() {
       this.$router.push({ name: 'Game' });
+    },
+
+    initTeacherImg() {
+      if (this.condition === '1') {
+        this.teacherImg = require('@/assets/img/퀴즈선생님.png');
+      } else if (this.condition === '2') {
+        this.teacherImg = require('@/assets/img/유아선생님.jpg');
+      }
+    },
+
+    preloadImg() {
+      for (let i = 0; i < this.imgs.length; i += 1) {
+        const img = new Image();
+        img.src = this.imgs[i];
+      }
+      console.log('preloaded');
     },
 
     numbering(num) {
@@ -111,7 +189,7 @@ export default {
           this.correct = false;
           this.now += 1;
         } else if (this.now + 1 === this.problems.length) {
-          this.submit();
+          this.isComplete = true;
         }
       }, 1000);
     },
@@ -136,13 +214,14 @@ export default {
   margin: 10px auto;
 }
 .quiz_img {
+  margin: 10px auto;
   text-align: center;
 }
 .quiz_title {
   margin: 10px 20px 0px 20px;
   width: 80%;
   font-size: 4.2vw !important;
-  line-height: 100px;
+  line-height: 60px;
   color: orange;
   text-align: center;
 }
@@ -151,7 +230,7 @@ export default {
   width: 80%;
   word-break: normal;
   font-size: 4vw !important;
-  line-height: 45px;
+  line-height: 35px;
   text-align: center;
 }
 .blind {
@@ -175,5 +254,18 @@ export default {
 }
 .answer {
   background-color: yellow;
+}
+
+.answerlist {
+  margin-top: 3px;
+  font-size: 3vw;
+}
+
+.imgbtn {
+  height: 60px !important;
+}
+
+.v-btn:before {
+  background-color: transparent !important;
 }
 </style>

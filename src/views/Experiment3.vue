@@ -10,7 +10,7 @@
     >
       <img
         :src="img"
-        height="250"
+        height="230"
       />
     </v-card-text>
 
@@ -18,7 +18,7 @@
       <v-btn
         v-if="!isPlaying && !isComplete"
         fab
-        @click="playAudio('잎 모양-선생님')"
+        @click="initAudio();"
       >
         ▶︎
       </v-btn>
@@ -49,23 +49,36 @@ export default {
     file: '',
     isPlaying: false,
     isComplete: false,
-    img: require('@/assets/잎/잎1.jpg'),
-    imgs: [
-      require('@/assets/잎/인사1.png'),
-      require('@/assets/잎/인사2.png'),
-      require('@/assets/잎/인사3.png'),
-      require('@/assets/잎/잎1.jpg'),
-      require('@/assets/잎/잎2.jpg'),
-      require('@/assets/잎/잎3.jpg'),
-      require('@/assets/잎/잎4.png'),
-      require('@/assets/잎/잎5.jpg'),
-      require('@/assets/잎/잎6.jpg'),
-      require('@/assets/잎/잎7.jpg'),
-      require('@/assets/잎/잎8.jpg'),
-      require('@/assets/잎/잎9.jpg'),
-      require('@/assets/잎/잎10.jpg'),
-      require('@/assets/잎/잎11.jpg'),
-    ],
+    img: null,
+    imgs: [[
+      require('@/assets/잎/1/001.png'),
+      require('@/assets/잎/1/002.png'),
+      require('@/assets/잎/1/003.png'),
+      require('@/assets/잎/1/004.png'),
+      require('@/assets/잎/1/005.png'),
+      require('@/assets/잎/1/006.png'),
+      require('@/assets/잎/1/007.png'),
+      require('@/assets/잎/1/008.png'),
+      require('@/assets/잎/1/009.png'),
+      require('@/assets/잎/1/010.png'),
+      require('@/assets/잎/1/011.png'),
+      require('@/assets/잎/1/012.png'),
+      require('@/assets/잎/1/013.png'),
+    ], [
+      require('@/assets/잎/2/001.png'),
+      require('@/assets/잎/2/002.png'),
+      require('@/assets/잎/2/003.png'),
+      require('@/assets/잎/2/004.png'),
+      require('@/assets/잎/2/005.png'),
+      require('@/assets/잎/2/006.png'),
+      require('@/assets/잎/2/007.png'),
+      require('@/assets/잎/2/008.png'),
+      require('@/assets/잎/2/009.png'),
+      require('@/assets/잎/2/010.png'),
+      require('@/assets/잎/2/011.png'),
+      require('@/assets/잎/2/012.png'),
+      require('@/assets/잎/2/013.png'),
+    ]],
   }),
 
   computed: {
@@ -75,7 +88,13 @@ export default {
   },
 
   mounted() {
-    this.playAudio('잎 모양-선생님');
+    this.preloadImg();
+    this.initImg();
+    this.initAudio();
+  },
+
+  beforeDestroy() {
+    this.stopAudio();
   },
 
   methods: {
@@ -83,10 +102,34 @@ export default {
       this.$router.push({ name: 'Quiz' });
     },
 
+    initImg() {
+      if (this.condition === '1') {
+        this.img = require('@/assets/잎/1/001.png');
+      } else if (this.condition === '2') {
+        this.img = require('@/assets/잎/2/001.png');
+      } else if (this.condition === '3') {
+        this.img = require('@/assets/잎/1/001.png');
+      } else if (this.condition === '4') {
+        this.img = require('@/assets/잎/2/001.png');
+      }
+    },
+
+    initAudio() {
+      if (this.condition === '1') {
+        this.playAudio('잎 모양-선생님');
+      } else if (this.condition === '2') {
+        this.playAudio('잎 모양-선생님');
+      } else if (this.condition === '3') {
+        this.playAudio('잎 모양-선생님');
+      } else if (this.condition === '4') {
+        this.playAudio('잎 모양-선생님');
+      }
+    },
+
     preloadImg() {
-      for (let i = 0; i < this.artImgs.length; i += 1) {
+      for (let i = 0; i < this.imgs[this.condition - 1].length; i += 1) {
         const img = new Image();
-        img.src = this.imgs[i].src;
+        img.src = this.imgs[this.condition - 1][i];
       }
       console.log('preloaded');
     },
@@ -103,6 +146,7 @@ export default {
         };
         audio.onended = () => {
           this.isPlaying = false;
+          this.isComplete = true;
         };
         audio.onerror = () => {
           this.isPlaying = false;
@@ -115,37 +159,76 @@ export default {
       }
     },
 
+    stopAudio() {
+      const audio = document.getElementById(this.file);
+      audio.currentTime = 0;
+      audio.pause();
+    },
+
     checkAudioTime(audio) {
       const { currentTime } = audio;
       if (this.isPlaying) {
         setTimeout(() => {
-          if (currentTime > 0 && currentTime < 5) {
-            this.img = require('@/assets/잎/잎1.jpg');
-          } else if (currentTime > 5 && currentTime < 11) {
-            this.img = require('@/assets/잎/잎2.jpg');
-          } else if (currentTime > 11 && currentTime < 21) {
-            this.img = require('@/assets/잎/잎3.jpg');
-          } else if (currentTime > 21 && currentTime < 30) {
-            this.img = require('@/assets/잎/잎4.png');
-          } else if (currentTime > 30 && currentTime < 38) {
-            this.img = require('@/assets/잎/잎1.jpg');
-          } else if (currentTime > 38 && currentTime < 45) {
-            this.img = require('@/assets/잎/잎5.jpg');
-          } else if (currentTime > 45 && currentTime < 48) {
-            this.img = require('@/assets/잎/잎6.jpg');
-          } else if (currentTime > 48 && currentTime < 55) {
-            this.img = require('@/assets/잎/잎7.jpg');
-          } else if (currentTime > 55 && currentTime < 65) {
-            this.img = require('@/assets/잎/잎9.jpg');
-          } else if (currentTime > 65 && currentTime < 70) {
-            this.img = require('@/assets/잎/잎10.jpg');
-          } else if (currentTime > 70 && currentTime < 79) {
-            this.img = require('@/assets/잎/잎11.jpg');
-          } else if (currentTime > 79 && currentTime < 87) {
-            this.img = require('@/assets/잎/인사1.png');
-          } else if (currentTime > 87) {
-            this.img = require('@/assets/잎/인사2.png');
-            this.isComplete = true;
+          if (this.condition === '1') {
+            if (currentTime > 0 && currentTime < 5) {
+              this.img = require('@/assets/잎/1/001.png');
+            } else if (currentTime > 5 && currentTime < 11) {
+              this.img = require('@/assets/잎/1/002.png');
+            } else if (currentTime > 11 && currentTime < 20) {
+              this.img = require('@/assets/잎/1/003.png');
+            } else if (currentTime > 20 && currentTime < 30) {
+              this.img = require('@/assets/잎/1/004.png');
+            } else if (currentTime > 30 && currentTime < 38) {
+              this.img = require('@/assets/잎/1/001.png');
+            } else if (currentTime > 38 && currentTime < 45) {
+              this.img = require('@/assets/잎/1/005.png');
+            } else if (currentTime > 45 && currentTime < 47) {
+              this.img = require('@/assets/잎/1/006.png');
+            } else if (currentTime > 47 && currentTime < 54) {
+              this.img = require('@/assets/잎/1/007.png');
+            } else if (currentTime > 54 && currentTime < 64) {
+              this.img = require('@/assets/잎/1/009.png');
+            } else if (currentTime > 64 && currentTime < 70) {
+              this.img = require('@/assets/잎/1/010.png');
+            } else if (currentTime > 70 && currentTime < 79) {
+              this.img = require('@/assets/잎/1/011.png');
+            } else if (currentTime > 79 && currentTime < 86) {
+              this.img = require('@/assets/잎/1/012.png');
+            } else if (currentTime > 86 && currentTime < 88) {
+              this.img = require('@/assets/잎/1/013.png');
+            } else if (currentTime > 88) {
+              this.isComplete = true;
+            }
+          } else if (this.condition === '2') {
+            if (currentTime > 0 && currentTime < 5) {
+              this.img = require('@/assets/잎/2/001.png');
+            } else if (currentTime > 5 && currentTime < 11) {
+              this.img = require('@/assets/잎/2/002.png');
+            } else if (currentTime > 11 && currentTime < 21) {
+              this.img = require('@/assets/잎/2/003.png');
+            } else if (currentTime > 21 && currentTime < 30) {
+              this.img = require('@/assets/잎/2/004.png');
+            } else if (currentTime > 30 && currentTime < 39) {
+              this.img = require('@/assets/잎/2/001.png');
+            } else if (currentTime > 39 && currentTime < 45) {
+              this.img = require('@/assets/잎/2/005.png');
+            } else if (currentTime > 45 && currentTime < 48) {
+              this.img = require('@/assets/잎/2/006.png');
+            } else if (currentTime > 48 && currentTime < 55) {
+              this.img = require('@/assets/잎/2/007.png');
+            } else if (currentTime > 55 && currentTime < 65) {
+              this.img = require('@/assets/잎/2/009.png');
+            } else if (currentTime > 65 && currentTime < 70) {
+              this.img = require('@/assets/잎/2/010.png');
+            } else if (currentTime > 70 && currentTime < 78) {
+              this.img = require('@/assets/잎/2/011.png');
+            } else if (currentTime > 78 && currentTime < 86) {
+              this.img = require('@/assets/잎/2/012.png');
+            } else if (currentTime > 86 && currentTime < 88) {
+              this.img = require('@/assets/잎/2/013.png');
+            } else if (currentTime > 88) {
+              this.isComplete = true;
+            }
           }
           this.checkAudioTime(audio);
         }, 100);

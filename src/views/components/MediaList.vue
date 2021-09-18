@@ -49,6 +49,9 @@ export default {
     ],
     ice: [
       '얼음-선생님',
+      '얼음-유아선생님',
+      '얼음-유아선생님 with Peer',
+      '얼음-선생님 with Peer',
     ],
     leaf: [
       '잎 모양-선생님',

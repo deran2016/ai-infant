@@ -10,7 +10,7 @@
     >
       <img
         :src="img"
-        height="250"
+        height="230"
       />
     </v-card-text>
 
@@ -18,7 +18,7 @@
       <v-btn
         v-if="!isPlaying && !isComplete"
         fab
-        @click="playAudio('얼음-선생님')"
+        @click="initAudio()"
       >
         ▶︎
       </v-btn>
@@ -49,20 +49,30 @@ export default {
     file: '',
     isPlaying: false,
     isComplete: false,
-    img: require('@/assets/얼음/인사1.png'),
-    imgs: [
-      require('@/assets/얼음/인사1.png'),
-      require('@/assets/얼음/인사2.png'),
-      require('@/assets/얼음/인사3.png'),
-      require('@/assets/얼음/인사4.png'),
-      require('@/assets/얼음/인사5.png'),
-      require('@/assets/얼음/얼음1.jpg'),
-      require('@/assets/얼음/얼음2.jpg'),
-      require('@/assets/얼음/얼음3.jpg'),
-      require('@/assets/얼음/얼음4.jpg'),
-      require('@/assets/얼음/얼음5.jpg'),
-      require('@/assets/얼음/얼음6.jpg'),
-    ],
+    img: null,
+    imgs: [[
+      require('@/assets/얼음/1/001.png'),
+      require('@/assets/얼음/1/002.png'),
+      require('@/assets/얼음/1/003.png'),
+      require('@/assets/얼음/1/004.png'),
+      require('@/assets/얼음/1/005.png'),
+      require('@/assets/얼음/1/006.png'),
+      require('@/assets/얼음/1/007.png'),
+      require('@/assets/얼음/1/008.png'),
+      require('@/assets/얼음/1/009.png'),
+      require('@/assets/얼음/1/010.png'),
+    ], [
+      require('@/assets/얼음/2/001.png'),
+      require('@/assets/얼음/2/002.png'),
+      require('@/assets/얼음/2/003.png'),
+      require('@/assets/얼음/2/004.png'),
+      require('@/assets/얼음/2/005.png'),
+      require('@/assets/얼음/2/006.png'),
+      require('@/assets/얼음/2/007.png'),
+      require('@/assets/얼음/2/008.png'),
+      require('@/assets/얼음/2/009.png'),
+      require('@/assets/얼음/2/010.png'),
+    ]],
   }),
 
   computed: {
@@ -72,7 +82,13 @@ export default {
   },
 
   mounted() {
-    this.playAudio('얼음-선생님');
+    this.preloadImg();
+    this.initImg();
+    this.initAudio();
+  },
+
+  beforeDestroy() {
+    this.stopAudio();
   },
 
   methods: {
@@ -80,10 +96,34 @@ export default {
       this.$router.push({ name: 'Experiment2' });
     },
 
+    initImg() {
+      if (this.condition === '1') {
+        this.img = require('@/assets/얼음/1/007.png');
+      } else if (this.condition === '2') {
+        this.img = require('@/assets/얼음/2/007.png');
+      } else if (this.condition === '3') {
+        this.img = require('@/assets/얼음/1/007.png');
+      } else if (this.condition === '4') {
+        this.img = require('@/assets/얼음/2/007.png');
+      }
+    },
+
+    initAudio() {
+      if (this.condition === '1') {
+        this.playAudio('얼음-선생님');
+      } else if (this.condition === '2') {
+        this.playAudio('얼음-유아선생님');
+      } else if (this.condition === '3') {
+        this.playAudio('얼음-선생님 with Peer');
+      } else if (this.condition === '4') {
+        this.playAudio('얼음-유아선생님 with Peer');
+      }
+    },
+
     preloadImg() {
-      for (let i = 0; i < this.artImgs.length; i += 1) {
+      for (let i = 0; i < this.imgs[this.condition - 1].length; i += 1) {
         const img = new Image();
-        img.src = this.imgs[i].src;
+        img.src = this.imgs[this.condition - 1][i];
       }
       console.log('preloaded');
     },
@@ -100,6 +140,7 @@ export default {
         };
         audio.onended = () => {
           this.isPlaying = false;
+          this.isComplete = true;
         };
         audio.onerror = () => {
           this.isPlaying = false;
@@ -112,35 +153,72 @@ export default {
       }
     },
 
+    stopAudio() {
+      const audio = document.getElementById(this.file);
+      audio.currentTime = 0;
+      audio.pause();
+    },
+
     checkAudioTime(audio) {
       const { currentTime } = audio;
       if (this.isPlaying) {
         setTimeout(() => {
-          if (currentTime > 0 && currentTime < 6) {
-            this.img = require('@/assets/얼음/인사1.png');
-          } else if (currentTime > 6 && currentTime < 12) {
-            this.img = require('@/assets/얼음/인사2.png');
-          } else if (currentTime > 12 && currentTime < 19) {
-            this.img = require('@/assets/얼음/얼음1.jpg');
-          } else if (currentTime > 19 && currentTime < 28) {
-            this.img = require('@/assets/얼음/얼음2.jpg');
-          } else if (currentTime > 28 && currentTime < 35) {
-            this.img = require('@/assets/얼음/얼음3.jpg');
-          } else if (currentTime > 35 && currentTime < 39) {
-            this.img = require('@/assets/얼음/얼음1.jpg');
-          } else if (currentTime > 39 && currentTime < 50) {
-            this.img = require('@/assets/얼음/얼음4.jpg');
-          } else if (currentTime > 50 && currentTime < 56) {
-            this.img = require('@/assets/얼음/얼음5.jpg');
-          } else if (currentTime > 56 && currentTime < 68) {
-            this.img = require('@/assets/얼음/얼음4.jpg');
-          } else if (currentTime > 68 && currentTime < 72) {
-            this.img = require('@/assets/얼음/얼음6.jpg');
-          } else if (currentTime > 72 && currentTime < 77) {
-            this.img = require('@/assets/얼음/인사3.png');
-          } else if (currentTime > 77) {
-            this.img = require('@/assets/얼음/인사5.png');
-            this.isComplete = true;
+          if (this.condition === '1') {
+            if (currentTime > 0 && currentTime < 6) {
+              this.img = require('@/assets/얼음/1/007.png');
+            } else if (currentTime > 6 && currentTime < 12) {
+              this.img = require('@/assets/얼음/1/008.png');
+            } else if (currentTime > 12 && currentTime < 19) {
+              this.img = require('@/assets/얼음/1/001.png');
+            } else if (currentTime > 19 && currentTime < 28) {
+              this.img = require('@/assets/얼음/1/002.png');
+            } else if (currentTime > 28 && currentTime < 35) {
+              this.img = require('@/assets/얼음/1/003.png');
+            } else if (currentTime > 35 && currentTime < 39) {
+              this.img = require('@/assets/얼음/1/001.png');
+            } else if (currentTime > 39 && currentTime < 50) {
+              this.img = require('@/assets/얼음/1/004.png');
+            } else if (currentTime > 50 && currentTime < 56) {
+              this.img = require('@/assets/얼음/1/005.png');
+            } else if (currentTime > 56 && currentTime < 68) {
+              this.img = require('@/assets/얼음/1/004.png');
+            } else if (currentTime > 68 && currentTime < 72) {
+              this.img = require('@/assets/얼음/1/006.png');
+            } else if (currentTime > 72 && currentTime < 77) {
+              this.img = require('@/assets/얼음/1/009.png');
+            } else if (currentTime > 77 && currentTime < 80) {
+              this.img = require('@/assets/얼음/1/010.png');
+            } else if (currentTime > 80) {
+              this.isComplete = true;
+            }
+          } else if (this.condition === '2') {
+            if (currentTime > 0 && currentTime < 5) {
+              this.img = require('@/assets/얼음/2/007.png');
+            } else if (currentTime > 5 && currentTime < 11) {
+              this.img = require('@/assets/얼음/2/008.png');
+            } else if (currentTime > 11 && currentTime < 18) {
+              this.img = require('@/assets/얼음/2/001.png');
+            } else if (currentTime > 18 && currentTime < 25) {
+              this.img = require('@/assets/얼음/2/002.png');
+            } else if (currentTime > 25 && currentTime < 31) {
+              this.img = require('@/assets/얼음/2/003.png');
+            } else if (currentTime > 31 && currentTime < 36) {
+              this.img = require('@/assets/얼음/2/001.png');
+            } else if (currentTime > 36 && currentTime < 46) {
+              this.img = require('@/assets/얼음/2/004.png');
+            } else if (currentTime > 46 && currentTime < 51) {
+              this.img = require('@/assets/얼음/2/005.png');
+            } else if (currentTime > 51 && currentTime < 62) {
+              this.img = require('@/assets/얼음/2/004.png');
+            } else if (currentTime > 62 && currentTime < 63) {
+              this.img = require('@/assets/얼음/2/006.png');
+            } else if (currentTime > 63 && currentTime < 72) {
+              this.img = require('@/assets/얼음/2/009.png');
+            } else if (currentTime > 72 && currentTime < 80) {
+              this.img = require('@/assets/얼음/2/010.png');
+            } else if (currentTime > 80) {
+              this.isComplete = true;
+            }
           }
           this.checkAudioTime(audio);
         }, 100);
