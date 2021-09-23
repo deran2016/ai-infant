@@ -99,6 +99,25 @@ export default {
       require('@/assets/잎/3/015.png'),
       require('@/assets/잎/3/016.png'),
       require('@/assets/잎/3/017.png'),
+    ], [
+      null,
+      require('@/assets/잎/4/001.png'),
+      require('@/assets/잎/4/002.png'),
+      require('@/assets/잎/4/003.png'),
+      require('@/assets/잎/4/004.png'),
+      require('@/assets/잎/4/005.png'),
+      require('@/assets/잎/4/006.png'),
+      require('@/assets/잎/4/007.png'),
+      require('@/assets/잎/4/008.png'),
+      require('@/assets/잎/4/009.png'),
+      require('@/assets/잎/4/010.png'),
+      require('@/assets/잎/4/011.png'),
+      require('@/assets/잎/4/012.png'),
+      require('@/assets/잎/4/013.png'),
+      require('@/assets/잎/4/014.png'),
+      require('@/assets/잎/4/015.png'),
+      require('@/assets/잎/4/016.png'),
+      require('@/assets/잎/4/017.png'),
     ]],
   }),
 
@@ -296,6 +315,50 @@ export default {
             } else if (currentTime > 126 && currentTime < 133) {
               img = 17;
             } else if (currentTime > 133) {
+              this.isComplete = true;
+            }
+          } else if (this.condition === '4') {
+            if (currentTime > 0 && currentTime < 6) {
+              img = 1;
+            } else if (currentTime > 6 && currentTime < 12) {
+              img = 2;
+            } else if (currentTime > 12 && currentTime < 15) {
+              img = 3;
+            } else if (currentTime > 15 && currentTime < 18) {
+              img = 4;
+            } else if (currentTime > 18 && currentTime < 26) {
+              img = 3;
+            } else if (currentTime > 26 && currentTime < 29) {
+              img = 4;
+            } else if (currentTime > 29 && currentTime < 37) {
+              img = 5;
+            } else if (currentTime > 37 && currentTime < 49) {
+              img = 6;
+            } else if (currentTime > 49 && currentTime < 58) {
+              img = 1;
+            } else if (currentTime > 58 && currentTime < 66) {
+              img = 7;
+            } else if (currentTime > 66 && currentTime < 70) {
+              img = 8;
+            } else if (currentTime > 70 && currentTime < 72) {
+              img = 9;
+            } else if (currentTime > 72 && currentTime < 80) {
+              img = 10;
+            } else if (currentTime > 80 && currentTime < 88) {
+              img = 11;
+            } else if (currentTime > 88 && currentTime < 94) {
+              img = 12;
+            } else if (currentTime > 94 && currentTime < 101) {
+              img = 13;
+            } else if (currentTime > 101 && currentTime < 111) {
+              img = 14;
+            } else if (currentTime > 111 && currentTime < 123) {
+              img = 15;
+            } else if (currentTime > 123 && currentTime < 132) {
+              img = 16;
+            } else if (currentTime > 132 && currentTime < 137) {
+              img = 17;
+            } else if (currentTime > 137) {
               this.isComplete = true;
             }
           }

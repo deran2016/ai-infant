@@ -89,6 +89,21 @@ export default {
       require('@/assets/나이테/3/011.png'),
       require('@/assets/나이테/3/012.png'),
       require('@/assets/나이테/3/013.png'),
+    ], [
+      null,
+      require('@/assets/나이테/4/001.png'),
+      require('@/assets/나이테/4/002.png'),
+      require('@/assets/나이테/4/003.png'),
+      require('@/assets/나이테/4/004.png'),
+      require('@/assets/나이테/4/005.png'),
+      require('@/assets/나이테/4/006.png'),
+      require('@/assets/나이테/4/007.png'),
+      require('@/assets/나이테/4/008.png'),
+      require('@/assets/나이테/4/009.png'),
+      require('@/assets/나이테/4/010.png'),
+      require('@/assets/나이테/4/011.png'),
+      require('@/assets/나이테/4/012.png'),
+      require('@/assets/나이테/4/013.png'),
     ]],
   }),
 
@@ -258,6 +273,38 @@ export default {
             } else if (currentTime > 92 && currentTime < 103) {
               img = 11;
             } else if (currentTime > 103 && currentTime < 108) {
+              img = 13;
+            } else if (currentTime > 108) {
+              this.isComplete = true;
+            }
+          } else if (this.condition === '4') {
+            if (currentTime > 0 && currentTime < 5) {
+              img = 12;
+            } else if (currentTime > 5 && currentTime < 12) {
+              img = 1;
+            } else if (currentTime > 12 && currentTime < 20) {
+              img = 2;
+            } else if (currentTime > 20 && currentTime < 24) {
+              img = 1;
+            } else if (currentTime > 24 && currentTime < 33) {
+              img = 3;
+            } else if (currentTime > 33 && currentTime < 46) {
+              img = 4;
+            } else if (currentTime > 46 && currentTime < 55) {
+              img = 5;
+            } else if (currentTime > 55 && currentTime < 66) {
+              img = 6;
+            } else if (currentTime > 66 && currentTime < 75) {
+              img = 7;
+            } else if (currentTime > 75 && currentTime < 81) {
+              img = 8;
+            } else if (currentTime > 81 && currentTime < 88) {
+              img = 9;
+            } else if (currentTime > 88 && currentTime < 93) {
+              img = 10;
+            } else if (currentTime > 93 && currentTime < 102) {
+              img = 11;
+            } else if (currentTime > 102 && currentTime < 108) {
               img = 13;
             } else if (currentTime > 108) {
               this.isComplete = true;
