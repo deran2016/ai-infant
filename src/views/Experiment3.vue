@@ -10,7 +10,7 @@
     >
       <img
         :src="img"
-        height="230"
+        style="object-fit:cover; height: 85vh"
       />
     </v-card-text>
 
@@ -51,6 +51,7 @@ export default {
     isComplete: false,
     img: null,
     imgs: [[
+      null,
       require('@/assets/잎/1/001.png'),
       require('@/assets/잎/1/002.png'),
       require('@/assets/잎/1/003.png'),
@@ -65,6 +66,7 @@ export default {
       require('@/assets/잎/1/012.png'),
       require('@/assets/잎/1/013.png'),
     ], [
+      null,
       require('@/assets/잎/2/001.png'),
       require('@/assets/잎/2/002.png'),
       require('@/assets/잎/2/003.png'),
@@ -78,6 +80,25 @@ export default {
       require('@/assets/잎/2/011.png'),
       require('@/assets/잎/2/012.png'),
       require('@/assets/잎/2/013.png'),
+    ], [
+      null,
+      require('@/assets/잎/3/001.png'),
+      require('@/assets/잎/3/002.png'),
+      require('@/assets/잎/3/003.png'),
+      require('@/assets/잎/3/004.png'),
+      require('@/assets/잎/3/005.png'),
+      require('@/assets/잎/3/006.png'),
+      require('@/assets/잎/3/007.png'),
+      require('@/assets/잎/3/008.png'),
+      require('@/assets/잎/3/009.png'),
+      require('@/assets/잎/3/010.png'),
+      require('@/assets/잎/3/011.png'),
+      require('@/assets/잎/3/012.png'),
+      require('@/assets/잎/3/013.png'),
+      require('@/assets/잎/3/014.png'),
+      require('@/assets/잎/3/015.png'),
+      require('@/assets/잎/3/016.png'),
+      require('@/assets/잎/3/017.png'),
     ]],
   }),
 
@@ -118,11 +139,11 @@ export default {
       if (this.condition === '1') {
         this.playAudio('잎 모양-선생님');
       } else if (this.condition === '2') {
-        this.playAudio('잎 모양-선생님');
+        this.playAudio('잎 모양-유아선생님');
       } else if (this.condition === '3') {
-        this.playAudio('잎 모양-선생님');
+        this.playAudio('잎 모양-선생님 with Peer');
       } else if (this.condition === '4') {
-        this.playAudio('잎 모양-선생님');
+        this.playAudio('잎 모양-유아선생님 with Peer');
       }
     },
 
@@ -167,69 +188,118 @@ export default {
 
     checkAudioTime(audio) {
       const { currentTime } = audio;
+      const imgs = this.imgs[this.condition - 1];
       if (this.isPlaying) {
         setTimeout(() => {
+          let img;
           if (this.condition === '1') {
             if (currentTime > 0 && currentTime < 5) {
-              this.img = require('@/assets/잎/1/001.png');
+              img = 1;
             } else if (currentTime > 5 && currentTime < 11) {
-              this.img = require('@/assets/잎/1/002.png');
+              img = 2;
             } else if (currentTime > 11 && currentTime < 20) {
-              this.img = require('@/assets/잎/1/003.png');
+              img = 3;
             } else if (currentTime > 20 && currentTime < 30) {
-              this.img = require('@/assets/잎/1/004.png');
+              img = 4;
             } else if (currentTime > 30 && currentTime < 38) {
-              this.img = require('@/assets/잎/1/001.png');
+              img = 1;
             } else if (currentTime > 38 && currentTime < 45) {
-              this.img = require('@/assets/잎/1/005.png');
+              img = 5;
             } else if (currentTime > 45 && currentTime < 47) {
-              this.img = require('@/assets/잎/1/006.png');
+              img = 6;
             } else if (currentTime > 47 && currentTime < 54) {
-              this.img = require('@/assets/잎/1/007.png');
+              img = 7;
             } else if (currentTime > 54 && currentTime < 64) {
-              this.img = require('@/assets/잎/1/009.png');
+              img = 9;
             } else if (currentTime > 64 && currentTime < 70) {
-              this.img = require('@/assets/잎/1/010.png');
+              img = 10;
             } else if (currentTime > 70 && currentTime < 79) {
-              this.img = require('@/assets/잎/1/011.png');
+              img = 11;
             } else if (currentTime > 79 && currentTime < 86) {
-              this.img = require('@/assets/잎/1/012.png');
+              img = 12;
             } else if (currentTime > 86 && currentTime < 88) {
-              this.img = require('@/assets/잎/1/013.png');
+              img = 13;
             } else if (currentTime > 88) {
               this.isComplete = true;
             }
           } else if (this.condition === '2') {
             if (currentTime > 0 && currentTime < 5) {
-              this.img = require('@/assets/잎/2/001.png');
+              img = 1;
             } else if (currentTime > 5 && currentTime < 11) {
-              this.img = require('@/assets/잎/2/002.png');
+              img = 2;
             } else if (currentTime > 11 && currentTime < 21) {
-              this.img = require('@/assets/잎/2/003.png');
+              img = 3;
             } else if (currentTime > 21 && currentTime < 30) {
-              this.img = require('@/assets/잎/2/004.png');
+              img = 4;
             } else if (currentTime > 30 && currentTime < 39) {
-              this.img = require('@/assets/잎/2/001.png');
+              img = 1;
             } else if (currentTime > 39 && currentTime < 45) {
-              this.img = require('@/assets/잎/2/005.png');
+              img = 5;
             } else if (currentTime > 45 && currentTime < 48) {
-              this.img = require('@/assets/잎/2/006.png');
+              img = 6;
             } else if (currentTime > 48 && currentTime < 55) {
-              this.img = require('@/assets/잎/2/007.png');
+              img = 7;
             } else if (currentTime > 55 && currentTime < 65) {
-              this.img = require('@/assets/잎/2/009.png');
+              img = 9;
             } else if (currentTime > 65 && currentTime < 70) {
-              this.img = require('@/assets/잎/2/010.png');
+              img = 10;
             } else if (currentTime > 70 && currentTime < 78) {
-              this.img = require('@/assets/잎/2/011.png');
+              img = 11;
             } else if (currentTime > 78 && currentTime < 86) {
-              this.img = require('@/assets/잎/2/012.png');
+              img = 12;
             } else if (currentTime > 86 && currentTime < 88) {
-              this.img = require('@/assets/잎/2/013.png');
+              img = 13;
             } else if (currentTime > 88) {
               this.isComplete = true;
             }
+          } else if (this.condition === '3') {
+            if (currentTime > 0 && currentTime < 5) {
+              img = 1;
+            } else if (currentTime > 5 && currentTime < 10) {
+              img = 2;
+            } else if (currentTime > 10 && currentTime < 13) {
+              img = 3;
+            } else if (currentTime > 13 && currentTime < 17) {
+              img = 4;
+            } else if (currentTime > 17 && currentTime < 24) {
+              img = 3;
+            } else if (currentTime > 24 && currentTime < 27) {
+              img = 4;
+            } else if (currentTime > 27 && currentTime < 34) {
+              img = 5;
+            } else if (currentTime > 34 && currentTime < 44) {
+              img = 6;
+            } else if (currentTime > 44 && currentTime < 49) {
+              img = 5;
+            } else if (currentTime > 49 && currentTime < 54) {
+              img = 7;
+            } else if (currentTime > 54 && currentTime < 61) {
+              img = 1;
+            } else if (currentTime > 61 && currentTime < 65) {
+              img = 8;
+            } else if (currentTime > 65 && currentTime < 68) {
+              img = 9;
+            } else if (currentTime > 68 && currentTime < 75) {
+              img = 10;
+            } else if (currentTime > 75 && currentTime < 83) {
+              img = 11;
+            } else if (currentTime > 83 && currentTime < 88) {
+              img = 12;
+            } else if (currentTime > 88 && currentTime < 95) {
+              img = 13;
+            } else if (currentTime > 95 && currentTime < 105) {
+              img = 14;
+            } else if (currentTime > 105 && currentTime < 117) {
+              img = 15;
+            } else if (currentTime > 117 && currentTime < 126) {
+              img = 16;
+            } else if (currentTime > 126 && currentTime < 133) {
+              img = 17;
+            } else if (currentTime > 133) {
+              this.isComplete = true;
+            }
           }
+          this.img = imgs[img];
           this.checkAudioTime(audio);
         }, 100);
       }

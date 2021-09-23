@@ -46,6 +46,9 @@ export default {
   data: () => ({
     annualzone: [
       '나이테-선생님',
+      '나이테-유아선생님',
+      '나이테-선생님 with Peer',
+      '나이테-유아선생님 with Peer',
     ],
     ice: [
       '얼음-선생님',
@@ -55,6 +58,9 @@ export default {
     ],
     leaf: [
       '잎 모양-선생님',
+      '잎 모양-유아선생님',
+      '잎 모양-선생님 with Peer',
+      '잎 모양-유아선생님 with Peer',
     ],
   }),
 

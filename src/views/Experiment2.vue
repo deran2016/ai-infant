@@ -10,7 +10,7 @@
     >
       <img
         :src="img"
-        height="230"
+        style="object-fit:cover; height: 85vh"
       />
     </v-card-text>
 
@@ -51,6 +51,7 @@ export default {
     isComplete: false,
     img: require('@/assets/나이테/1/009.png'),
     imgs: [[
+      null,
       require('@/assets/나이테/1/001.png'),
       require('@/assets/나이테/1/002.png'),
       require('@/assets/나이테/1/003.png'),
@@ -62,6 +63,7 @@ export default {
       require('@/assets/나이테/1/009.png'),
       require('@/assets/나이테/1/010.png'),
     ], [
+      null,
       require('@/assets/나이테/2/001.png'),
       require('@/assets/나이테/2/002.png'),
       require('@/assets/나이테/2/003.png'),
@@ -72,6 +74,21 @@ export default {
       require('@/assets/나이테/2/008.png'),
       require('@/assets/나이테/2/009.png'),
       require('@/assets/나이테/2/010.png'),
+    ], [
+      null,
+      require('@/assets/나이테/3/001.png'),
+      require('@/assets/나이테/3/002.png'),
+      require('@/assets/나이테/3/003.png'),
+      require('@/assets/나이테/3/004.png'),
+      require('@/assets/나이테/3/005.png'),
+      require('@/assets/나이테/3/006.png'),
+      require('@/assets/나이테/3/007.png'),
+      require('@/assets/나이테/3/008.png'),
+      require('@/assets/나이테/3/009.png'),
+      require('@/assets/나이테/3/010.png'),
+      require('@/assets/나이테/3/011.png'),
+      require('@/assets/나이테/3/012.png'),
+      require('@/assets/나이테/3/013.png'),
     ]],
   }),
 
@@ -112,11 +129,11 @@ export default {
       if (this.condition === '1') {
         this.playAudio('나이테-선생님');
       } else if (this.condition === '2') {
-        this.playAudio('나이테-선생님');
+        this.playAudio('나이테-유아선생님');
       } else if (this.condition === '3') {
-        this.playAudio('나이테-선생님');
+        this.playAudio('나이테-선생님 with Peer');
       } else if (this.condition === '4') {
-        this.playAudio('나이테-선생님');
+        this.playAudio('나이테-유아선생님 with Peer');
       }
     },
 
@@ -161,57 +178,92 @@ export default {
 
     checkAudioTime(audio) {
       const { currentTime } = audio;
+      const imgs = this.imgs[this.condition - 1];
       if (this.isPlaying) {
         setTimeout(() => {
+          let img;
           if (this.condition === '1') {
             if (currentTime > 0 && currentTime < 4) {
-              this.img = require('@/assets/나이테/1/009.png');
+              img = 9;
             } else if (currentTime > 4 && currentTime < 16) {
-              this.img = require('@/assets/나이테/1/001.png');
+              img = 1;
             } else if (currentTime > 16 && currentTime < 24) {
-              this.img = require('@/assets/나이테/1/002.png');
+              img = 2;
             } else if (currentTime > 24 && currentTime < 36) {
-              this.img = require('@/assets/나이테/1/003.png');
+              img = 3;
             } else if (currentTime > 36 && currentTime < 50) {
-              this.img = require('@/assets/나이테/1/004.png');
+              img = 4;
             } else if (currentTime > 50 && currentTime < 58) {
-              this.img = require('@/assets/나이테/1/005.png');
+              img = 5;
             } else if (currentTime > 58 && currentTime < 62) {
-              this.img = require('@/assets/나이테/1/006.png');
+              img = 6;
             } else if (currentTime > 62 && currentTime < 70) {
-              this.img = require('@/assets/나이테/1/007.png');
+              img = 7;
             } else if (currentTime > 70 && currentTime < 79) {
-              this.img = require('@/assets/나이테/1/008.png');
+              img = 8;
             } else if (currentTime > 79 && currentTime < 82) {
-              this.img = require('@/assets/나이테/1/010.png');
+              img = 10;
             } else if (currentTime > 82) {
               this.isComplete = true;
             }
           } else if (this.condition === '2') {
             if (currentTime > 0 && currentTime < 4) {
-              this.img = require('@/assets/나이테/2/009.png');
+              img = 9;
             } else if (currentTime > 4 && currentTime < 15) {
-              this.img = require('@/assets/나이테/2/001.png');
+              img = 1;
             } else if (currentTime > 15 && currentTime < 24) {
-              this.img = require('@/assets/나이테/2/002.png');
+              img = 2;
             } else if (currentTime > 24 && currentTime < 37) {
-              this.img = require('@/assets/나이테/2/003.png');
+              img = 3;
             } else if (currentTime > 37 && currentTime < 45) {
-              this.img = require('@/assets/나이테/2/004.png');
+              img = 4;
             } else if (currentTime > 45 && currentTime < 53) {
-              this.img = require('@/assets/나이테/2/005.png');
+              img = 5;
             } else if (currentTime > 53 && currentTime < 59) {
-              this.img = require('@/assets/나이테/2/006.png');
+              img = 6;
             } else if (currentTime > 59 && currentTime < 65) {
-              this.img = require('@/assets/나이테/2/007.png');
+              img = 7;
             } else if (currentTime > 65 && currentTime < 75) {
-              this.img = require('@/assets/나이테/2/008.png');
+              img = 8;
             } else if (currentTime > 75 && currentTime < 82) {
-              this.img = require('@/assets/나이테/2/010.png');
+              img = 10;
             } else if (currentTime > 82) {
               this.isComplete = true;
             }
+          } else if (this.condition === '3') {
+            if (currentTime > 0 && currentTime < 5) {
+              img = 12;
+            } else if (currentTime > 5 && currentTime < 13) {
+              img = 1;
+            } else if (currentTime > 13 && currentTime < 20) {
+              img = 2;
+            } else if (currentTime > 20 && currentTime < 24) {
+              img = 1;
+            } else if (currentTime > 24 && currentTime < 33) {
+              img = 3;
+            } else if (currentTime > 33 && currentTime < 46) {
+              img = 4;
+            } else if (currentTime > 46 && currentTime < 55) {
+              img = 5;
+            } else if (currentTime > 55 && currentTime < 66) {
+              img = 6;
+            } else if (currentTime > 66 && currentTime < 75) {
+              img = 7;
+            } else if (currentTime > 75 && currentTime < 81) {
+              img = 8;
+            } else if (currentTime > 81 && currentTime < 87) {
+              img = 9;
+            } else if (currentTime > 87 && currentTime < 92) {
+              img = 10;
+            } else if (currentTime > 92 && currentTime < 103) {
+              img = 11;
+            } else if (currentTime > 103 && currentTime < 108) {
+              img = 13;
+            } else if (currentTime > 108) {
+              this.isComplete = true;
+            }
           }
+          this.img = imgs[img];
           this.checkAudioTime(audio);
         }, 100);
       }
