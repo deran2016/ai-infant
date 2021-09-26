@@ -2,7 +2,6 @@
   <v-card
     class="mx-auto"
     max-width="95vw"
-    height="95vh"
     outlined
   >
     <v-card-text
@@ -13,30 +12,39 @@
         :class="{circle: correct}"
       >
         <h1 class="quiz_title">
-          퀴즈! 맞혀보세요!
+          <span v-if="condition === '1' || condition === '2'">퀴즈! 맞혀보세요!</span>
+          <span v-if="condition === '3' || condition === '4'">친구에게 알려주세요!</span>
         </h1>
         <p class="quiz_content">
-          {{ problems[now].problem.split(problems[now].answer)[0] }}
-          <span
-            v-show="problems[now].problem.split(problems[now].answer).length > 1"
-            :class="{blind: blind, answer: correct}"
-          >
-            {{ problems[now].answer }}
+          <span v-show="!isProblem">
+            {{ text }}
           </span>
-          {{ problems[now].problem.split(problems[now].answer)[1] }}
+          <span v-show="isProblem">
+            {{ problems[selectProblem][now].problem.split(problems[selectProblem][now].answer)[0] }}
+            <span
+              v-show="problems[selectProblem][now].problem
+                .split(problems[selectProblem][now].answer).length > 1"
+              :class="{blind: blind, answer: correct}"
+            >
+              {{ problems[selectProblem][now].answer }}
+            </span>
+            {{ problems[selectProblem][now].problem.split(problems[selectProblem][now].answer)[1] }}
+          </span>
         </p>
         <div class="row answerlist">
           <v-btn
-            v-for="(item, key) in problems[now].list"
+            v-for="(item, key) in problems[selectProblem][now].list"
+            v-show="isProblem"
             :id="item"
             :key="key"
-            :class="{check: correct && (problems[now].answer === item),
+            :class="{check: correct && (problems[selectProblem][now].answer === item),
                      imgbtn: isImageType,
                      hover: true}"
+            :disabled="disabled"
             outlined
             rounded
             style="margin-right: 4px; margin-bottom: 10px; font-size: 2vw;"
-            @click="checkAnswer(problems[now], item)"
+            @click="checkAnswer(problems[selectProblem][now], item)"
           >
             <span v-show="!isImageType">
               {{ numbering(key + 1) + ' ' + item }}
@@ -57,6 +65,13 @@
     </v-card-text>
 
     <v-card-actions>
+      <v-btn
+        v-if="!isStarted"
+        fab
+        @click="initAudio()"
+      >
+        ▶︎
+      </v-btn>
       <v-btn
         v-if="isComplete"
         outlined
@@ -82,17 +97,24 @@ import { setTimeout } from 'timers';
 
 export default {
   data: () => ({
+    isStarted: false,
+    file: '',
+    isPlaying: false,
+    isProblem: true,
+    disabled: true,
+    text: '',
     now: 0,
     blind: true,
     correct: false,
     isComplete: false,
     teacherImg: null,
+    explain: false,
     imgs: [
       require('@/assets/img/퀴즈3번1.png'),
       require('@/assets/img/퀴즈3번2.png'),
       require('@/assets/img/퀴즈3번3.png'),
     ],
-    problems: [{
+    problems: [[{
       problem: '손에 물기때문에 얼음이 달라붙는다',
       answer: '물기',
       list: ['물기', '붙기', '돌기'],
@@ -113,6 +135,27 @@ export default {
       answer: '피부가 따뜻해서 얼음이 녹는다.',
       list: ['피부가 차가워서 얼음이 떨어진다.', '피부가 따뜻해서 얼음이 녹는다.', '피부가 부드러워서 얼음이 떨어진다.'],
     }],
+    [{
+      problem: '왜 붙었는지 너가 알려줄 수 있어?',
+      answer: '물기 때문에',
+      list: ['물기 때문에', '붙기 때문에', '돌기 때문에'],
+    }, {
+      problem: '우리나라의 3살 짜리 나무는 나이테가 몇 개일까?',
+      answer: '3개',
+      list: ['1개', '3개', '5개'],
+    }, {
+      problem: '더운 곳에서 사는 식물을 알려줘!',
+      answer: '퀴즈3번1.png',
+      list: ['퀴즈3번1.png', '퀴즈3번2.png', '퀴즈3번3.png'],
+    }, {
+      problem: '날이 덥고 습한 열대지방은 항상 해가 쨍쨍하고 덥대. 나이테는 어떻게 생겼을까?',
+      answer: '없다',
+      list: ['뾰족한 모양', '네모 모양', '없다'],
+    }, {
+      problem: '얼음을 손으로 잡으면 손에 달라 붙었다가 왜 금방 떨어질까?',
+      answer: '피부가 따뜻해서 얼음이 녹는다.',
+      list: ['피부가 차가워서 얼음이 떨어진다.', '피부가 따뜻해서 얼음이 녹는다.', '피부가 부드러워서 얼음이 떨어진다.'],
+    }]],
   }),
 
   computed: {
@@ -121,18 +164,32 @@ export default {
     },
     isImageType() {
       let check = false;
-      if (this.problems[this.now].answer.indexOf('.png') > 0) {
+      if (this.problems[this.selectProblem][this.now].answer.indexOf('.png') > 0) {
         check = true;
       } else {
         check = false;
       }
       return check;
     },
+    selectProblem() {
+      let num = 0;
+      if (this.condition === '1' || this.condition === '2') {
+        num = 0;
+      } else if (this.condition === '3' || this.condition === '4') {
+        num = 1;
+      }
+      return num;
+    },
   },
 
   mounted() {
+    if ((this.condition === '3' || this.condition === '4') && this.now === 0) {
+      this.text = '내가 얼음을 만졌는데 손에 달라붙었어! 왜 붙었는지 잘 모르겠어.';
+      this.isProblem = false;
+    }
     this.preloadImg();
     this.initTeacherImg();
+    this.initAudio();
   },
 
   methods: {
@@ -145,6 +202,26 @@ export default {
         this.teacherImg = require('@/assets/img/퀴즈선생님.png');
       } else if (this.condition === '2') {
         this.teacherImg = require('@/assets/img/유아선생님.jpg');
+      } else if (this.condition === '3' || this.condition === '4') {
+        this.teacherImg = require('@/assets/img/유아.png');
+      }
+    },
+
+    initAudio() {
+      this.isStarted = true;
+      if (this.condition === '1') {
+        this.playAudio('1번-선생님', () => {
+          this.disabled = false;
+        });
+      } else if (this.condition === '2') {
+        this.playAudio('1번-유아선생님', () => {
+          this.disabled = false;
+        });
+      } else if (this.condition === '3' || this.condition === '4') {
+        this.playAudio('1번-유아', () => {
+          this.disabled = false;
+          this.isProblem = true;
+        });
       }
     },
 
@@ -178,20 +255,90 @@ export default {
       if (problem.answer === item) {
         this.blind = false;
         this.correct = true;
-        this.next();
+        if (this.condition === '1') {
+          this.playAudio(`${this.now + 1}번-선생님(정답)`, () => {
+            this.next();
+          });
+        } else if (this.condition === '2') {
+          this.playAudio(`${this.now + 1}번-유아선생님(정답)`, () => {
+            this.next();
+          });
+        } else if (this.condition === '3' || this.condition === '4') {
+          if (this.now === 0) {
+            this.text = '아하! 손의 물기 때문이구나~ 알려줘서 고마워!';
+            this.isProblem = false;
+          }
+          this.playAudio(`${this.now + 1}번-유아(정답)`, () => {
+            this.next();
+          });
+        }
+      } else if (problem.answer !== item) {
+        if (this.condition === '1') {
+          this.playAudio('틀렸을 때-선생님', () => {
+            this.disabled = false;
+          });
+        } else if (this.condition === '2') {
+          this.playAudio('틀렸을 때-유아선생님', () => {
+            this.disabled = false;
+          });
+        } else if (this.condition === '3' || this.condition === '4') {
+          this.playAudio('틀렸을 때-유아', () => {
+            this.disabled = false;
+          });
+        }
       }
     },
 
     next() {
       setTimeout(() => {
-        if (this.now + 1 < this.problems.length) {
+        if (this.now + 1 < this.problems[this.selectProblem].length) {
           this.blind = true;
           this.correct = false;
           this.now += 1;
-        } else if (this.now + 1 === this.problems.length) {
+          this.disabled = false;
+          if (this.condition === '1') {
+            this.playAudio(`${this.now + 1}번-선생님`, () => {
+              this.disabled = false;
+            });
+          } else if (this.condition === '2') {
+            this.playAudio(`${this.now + 1}번-유아선생님`, () => {
+              this.disabled = false;
+            });
+          } else if (this.condition === '3' || this.condition === '4') {
+            this.isProblem = true;
+            this.playAudio(`${this.now + 1}번-유아`, () => {
+              this.disabled = false;
+            });
+          }
+        } else if (this.now + 1 === this.problems[this.selectProblem].length) {
           this.isComplete = true;
         }
       }, 1000);
+    },
+
+    playAudio(file, callback = () => {}) {
+      this.file = file;
+
+      const audio = document.getElementById(this.file);
+      try {
+        audio.play();
+        audio.onplaying = () => {
+          this.isPlaying = true;
+          this.disabled = true;
+        };
+        audio.onended = () => {
+          callback();
+          this.isPlaying = false;
+        };
+        audio.onerror = () => {
+          this.isPlaying = false;
+        };
+      } catch (e) {
+        this.isPlaying = false;
+        console.log(e);
+      } finally {
+        this.isPlaying = false;
+      }
     },
   },
 };
