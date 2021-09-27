@@ -208,7 +208,6 @@ export default {
     },
 
     initAudio() {
-      this.isStarted = true;
       if (this.condition === '1') {
         this.playAudio('1번-선생님', () => {
           this.disabled = false;
@@ -323,6 +322,7 @@ export default {
       try {
         audio.play();
         audio.onplaying = () => {
+          this.isStarted = true;
           this.isPlaying = true;
           this.disabled = true;
         };
