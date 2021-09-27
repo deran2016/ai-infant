@@ -219,6 +219,7 @@ export default {
             } else if (currentTime > 79 && currentTime < 82) {
               img = 10;
             } else if (currentTime > 82) {
+              img = 10;
               this.isComplete = true;
             }
           } else if (this.condition === '2') {
@@ -243,6 +244,7 @@ export default {
             } else if (currentTime > 75 && currentTime < 82) {
               img = 10;
             } else if (currentTime > 82) {
+              img = 10;
               this.isComplete = true;
             }
           } else if (this.condition === '3') {
@@ -275,6 +277,7 @@ export default {
             } else if (currentTime > 103 && currentTime < 108) {
               img = 13;
             } else if (currentTime > 108) {
+              img = 13;
               this.isComplete = true;
             }
           } else if (this.condition === '4') {
@@ -307,6 +310,7 @@ export default {
             } else if (currentTime > 102 && currentTime < 108) {
               img = 13;
             } else if (currentTime > 108) {
+              img = 13;
               this.isComplete = true;
             }
           }
