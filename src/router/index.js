@@ -47,9 +47,9 @@ const routes = [
     component: () => import('../views/Game.vue'),
   },
   {
-    path: '/:preset/survey',
-    name: 'Survey',
-    component: () => import('../views/Survey.vue'),
+    path: '/:preset/summary',
+    name: 'Summary',
+    component: () => import('../views/Summary.vue'),
   },
   {
     path: '/:preset/submit',

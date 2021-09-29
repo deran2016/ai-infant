@@ -66,9 +66,16 @@
 
     <v-card-actions>
       <v-btn
-        v-if="!isStarted"
+        v-if="!isStarted && !now"
         fab
         @click="initAudio()"
+      >
+        ▶︎
+      </v-btn>
+      <v-btn
+        v-if="!isStarted && now"
+        fab
+        @click="playAudio(file, () => {disabled = false})"
       >
         ▶︎
       </v-btn>
@@ -94,6 +101,7 @@
 /* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable global-require */
 import { setTimeout } from 'timers';
+import { mapMutations } from 'vuex';
 
 export default {
   data: () => ({
@@ -109,6 +117,8 @@ export default {
     isComplete: false,
     teacherImg: null,
     explain: false,
+    countUp: {},
+    failCount: {},
     imgs: [
       require('@/assets/img/퀴즈3번1.png'),
       require('@/assets/img/퀴즈3번2.png'),
@@ -117,7 +127,7 @@ export default {
     problems: [[{
       problem: '손에 물기때문에 얼음이 달라붙는다',
       answer: '물기',
-      list: ['물기', '붙기', '돌기'],
+      list: ['물기', '부기', '돌기'],
     }, {
       problem: '우리나라 3살 나무의 나이테는 3개이다.',
       answer: '3개',
@@ -138,7 +148,7 @@ export default {
     [{
       problem: '왜 붙었는지 너가 알려줄 수 있어?',
       answer: '물기 때문에',
-      list: ['물기 때문에', '붙기 때문에', '돌기 때문에'],
+      list: ['물기 때문에', '부기 때문에', '돌기 때문에'],
     }, {
       problem: '우리나라의 3살 짜리 나무는 나이테가 몇 개일까?',
       answer: '3개',
@@ -190,10 +200,16 @@ export default {
     this.preloadImg();
     this.initTeacherImg();
     this.initAudio();
+    this.countUpTimer();
   },
 
   methods: {
+    ...mapMutations([
+      'updateFields',
+    ]),
+
     submit() {
+      this.updateFields({ quizTime: this.countUp, quizfailCount: this.failCount });
       this.$router.push({ name: 'Game' });
     },
 
@@ -255,23 +271,31 @@ export default {
         this.blind = false;
         this.correct = true;
         if (this.condition === '1') {
-          this.playAudio(`${this.now + 1}번-선생님(정답)`, () => {
-            this.next();
+          this.playAudio('맞았을 때(딩동댕)', () => {
+            this.playAudio(`${this.now + 1}번-선생님(정답)`, () => {
+              this.next();
+            });
           });
         } else if (this.condition === '2') {
-          this.playAudio(`${this.now + 1}번-유아선생님(정답)`, () => {
-            this.next();
+          this.playAudio('맞았을 때(딩동댕)', () => {
+            this.playAudio(`${this.now + 1}번-유아선생님(정답)`, () => {
+              this.next();
+            });
           });
         } else if (this.condition === '3' || this.condition === '4') {
           if (this.now === 0) {
             this.text = '아하! 손의 물기 때문이구나~ 알려줘서 고마워!';
             this.isProblem = false;
           }
-          this.playAudio(`${this.now + 1}번-유아(정답)`, () => {
-            this.next();
+          this.playAudio('맞았을 때(딩동댕)', () => {
+            this.playAudio(`${this.now + 1}번-유아(정답)`, () => {
+              this.next();
+            });
           });
         }
       } else if (problem.answer !== item) {
+        if (!this.failCount[`quiz${this.now + 1}`]) this.failCount[`quiz${this.now + 1}`] = 0;
+        this.$set(this.failCount, `quiz${this.now + 1}`, this.failCount[`quiz${this.now + 1}`] + 1);
         if (this.condition === '1') {
           this.playAudio('틀렸을 때-선생님', () => {
             this.disabled = false;
@@ -293,8 +317,9 @@ export default {
         if (this.now + 1 < this.problems[this.selectProblem].length) {
           this.blind = true;
           this.correct = false;
+          this.isStarted = false;
           this.now += 1;
-          this.disabled = false;
+          this.disabled = true;
           if (this.condition === '1') {
             this.playAudio(`${this.now + 1}번-선생님`, () => {
               this.disabled = false;
@@ -325,6 +350,7 @@ export default {
           this.isStarted = true;
           this.isPlaying = true;
           this.disabled = true;
+          this.checkAudioTime(audio);
         };
         audio.onended = () => {
           callback();
@@ -338,6 +364,31 @@ export default {
         console.log(e);
       } finally {
         this.isPlaying = false;
+      }
+    },
+
+    checkAudioTime(audio) {
+      const { currentTime } = audio;
+      if (this.isPlaying && !this.isProblem) {
+        setTimeout(() => {
+          if (currentTime > 7) {
+            this.isProblem = true;
+          }
+          this.checkAudioTime(audio);
+        }, 100);
+      }
+    },
+
+    countUpTimer() {
+      if (this.$router.history.current.name === 'Quiz') {
+        setTimeout(() => {
+          if (!this.countUp[`quiz${this.now + 1}`]) this.countUp[`quiz${this.now + 1}`] = 0;
+          // this.countUp[this.selectedImg] = ((this.countUp[this.selectedImg] * 10) + 1) / 10;
+          this.$set(this.countUp, this.now,
+            ((this.countUp[`quiz${this.now + 1}`] * 10) + 1) / 10);
+          this.watched = Object.keys(this.countUp).length;
+          this.countUpTimer();
+        }, 100);
       }
     },
   },

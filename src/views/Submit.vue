@@ -5,26 +5,7 @@
     outlined
   >
     <v-card-text>
-      <div class="px-8 mb-5 title">
-        수고하셨습니다
-      </div>
       <div class="px-8 py-5 body-1">
-        <div v-if="condition !== '1'">
-          <canvas
-            v-for="i in stylizedCount"
-            :id="`stylized${i}`"
-            :key="i"
-            style="margin: 3px;"
-          >
-          </canvas>
-        </div>
-        <div
-          v-if="condition !== '1'"
-          class="text-center"
-        >
-          저장하고 싶은 이미지를 마우스 우클릭하시고 ‘이미지를 다른 이름으로 저장’을 클릭하시면 이미지 저장이 가능합니다.
-        </div>
-        <br />
         <div class="text-center">
           마지막으로 아래 링크로 들어가셔서 설문을 완료해 주셔야 실험이 종료됩니다.
         </div>
@@ -52,7 +33,6 @@
 
 <script>
 /* eslint-disable import/no-unresolved */
-// import axios from 'axios';
 
 export default {
   data: () => ({
@@ -67,16 +47,9 @@ export default {
     condition() {
       return this.$store.state.data.experimentType;
     },
-
-    stylizedCount() {
-      return this.$store.state.data.stylizedCount;
-    },
   },
 
   async mounted() {
-    if (this.condition !== '1') {
-      this.getLocalFile();
-    }
     this.submitData();
     this.countDownTimer();
     setTimeout(() => {
@@ -89,28 +62,6 @@ export default {
   },
 
   methods: {
-    loadImg(index) {
-      const canvas = this.$el.querySelector(`#stylized${index}`);
-      if (canvas.getContext) {
-        const ctx = canvas.getContext('2d');
-        if (this.stylizedObjects[`stylized${index}`] && this.stylizedObjects[`stsize${index}`]) {
-          const aData = this.stylizedObjects[`stylized${index}`].split('|');
-          const size = this.stylizedObjects[`stsize${index}`].split(',');
-          const imgData = ctx.createImageData(size[0], size[1]);
-          [canvas.width, canvas.height] = [size[0], size[1]];
-          let j = 0;
-          for (let i = 0; i < imgData.data.length; i += 4) {
-            imgData.data[i] = aData[j];
-            imgData.data[i + 1] = aData[j + 1];
-            imgData.data[i + 2] = aData[j + 2];
-            imgData.data[i + 3] = 0xFF;
-            j += 3;
-          }
-          ctx.putImageData(imgData, 0, 0);
-        }
-      }
-    },
-
     async submitData() {
       this.isSending = true;
       const data = this.$store.getters.getSubmitData;
@@ -127,11 +78,13 @@ export default {
     goSurvey() {
       let url = '';
       if (this.condition === '1') {
-        url = 'https://forms.gle/a4UBA7uCvuMuMyay8';
+        url = 'https://forms.gle/';
       } else if (this.condition === '2') {
-        url = 'https://forms.gle/qMFoztNUbAJovh417';
+        url = 'https://forms.gle/';
       } else if (this.condition === '3') {
-        url = 'https://forms.gle/W4Dcjb5ndfjKZrbZA';
+        url = 'https://forms.gle/';
+      } else if (this.condition === '4') {
+        url = 'https://forms.gle/';
       }
       window.open(url);
     },
@@ -143,33 +96,6 @@ export default {
           this.countDownTimer();
         }, 1000);
       }
-    },
-
-    getLocalFile() {
-      window.requestFileSystem = window.requestFileSystem || window.webkitRequestFileSystem;
-      navigator.webkitPersistentStorage.requestQuota(1024 * 1024 * 10, (grantedSize) => {
-        window.requestFileSystem(window.PERSISTENT, grantedSize, (fs) => {
-          this.filesystem = fs;
-          console.log('저장소 요청 성공');
-          this.filesystem.root.getFile('stylized.txt', {}, (fileEntry) => {
-            console.log(`파일 열기 성공: ${fileEntry.fullPath}`);
-            fileEntry.file((file) => {
-              const reader = new FileReader();
-              reader.onloadend = () => {
-                this.stylizedObjects = JSON.parse(reader.result);
-                for (let i = 1; i <= this.stylizedCount; i += 1) {
-                  this.loadImg(i);
-                }
-              };
-              reader.readAsText(file, 'utf-8');
-            });
-          });
-        }, (error) => {
-          console.log(error);
-        });
-      }, (error) => {
-        console.log(error);
-      });
     },
   },
 };

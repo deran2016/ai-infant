@@ -129,6 +129,32 @@
         <p>Your browser does not support the <code>audio</code> element.</p>
       </audio>
     </div>
+
+    <!-- 요약 -->
+    <div>
+      <audio
+        v-for="(file, key) in summary"
+        :id="file"
+        :key="key"
+        :src="require(`@/assets/quiz/${file}.mp3`)"
+        preload="auto"
+      >
+        <p>Your browser does not support the <code>audio</code> element.</p>
+      </audio>
+    </div>
+
+    <!-- 그림그리기 -->
+    <div>
+      <audio
+        v-for="(file, key) in drawing"
+        :id="file"
+        :key="key"
+        :src="require(`@/assets/quiz/${file}.mp3`)"
+        preload="auto"
+      >
+        <p>Your browser does not support the <code>audio</code> element.</p>
+      </audio>
+    </div>
   </div>
 </template>
 
@@ -165,6 +191,16 @@ export default {
       '틀렸을 때-선생님',
       '틀렸을 때-유아',
       '틀렸을 때-유아선생님',
+    ],
+    summary: [
+      '요약-선생님',
+      '요약-유아선생님',
+      '요약-유아',
+    ],
+    drawing: [
+      '그림그리기-선생님',
+      '그림그리기-유아선생님',
+      '그림그리기-유아',
     ],
   }),
 

@@ -81,6 +81,13 @@
           </v-btn>
           -->
         </div>
+        <v-btn
+          color="primary"
+          :disabled="disabled"
+          @click="submit"
+        >
+          완성하기 {{ countDown > 0 ? `(${countDown})` : '' }}
+        </v-btn>
       </div>
     </v-card-text>
   </v-card>
@@ -90,8 +97,12 @@
 /* eslint-disable import/no-unresolved */
 /* eslint-disable global-require */
 /* eslint-disable import/no-extraneous-dependencies */
+import { mapMutations } from 'vuex';
+
 export default {
   data: () => ({
+    countDown: 10,
+    countUp: 0,
     painting: false,
     mode: 'draw',
     color: '#000000',
@@ -124,6 +135,9 @@ export default {
     condition() {
       return this.$store.state.data.experimentType;
     },
+    disabled() {
+      return this.countDown > 0;
+    },
   },
 
   mounted() {
@@ -132,11 +146,18 @@ export default {
     this.canvas.addEventListener('touchmove', this.onMouseMove);
     this.canvas.addEventListener('touchend', this.stopPainting);
     this.canvas.addEventListener('touchcancel', this.stopPainting);
+    this.countDownTimer();
+    this.countUpTimer();
   },
 
   methods: {
+    ...mapMutations([
+      'updateFields',
+    ]),
+
     submit() {
-      this.$router.push({ name: 'Experiment1' });
+      this.updateFields({ drawingTime: this.countUp });
+      this.$router.push({ name: 'Summary' });
     },
 
     setColor(color) {
@@ -161,8 +182,15 @@ export default {
     },
 
     startPainting(event) {
-      const x = event.touches[0].clientX - this.canvas.offsetLeft - 20;
-      const y = event.touches[0].clientY - this.canvas.offsetTop - 20;
+      let pos = { x: event.clientX, y: event.clientY };
+      if (event.touches) {
+        pos = { x: event.touches[0].clientX, y: event.touches[0].clientY };
+      }
+      const rect = event.target.getBoundingClientRect();
+      const xRel = pos.x - rect.left;
+      const yRel = pos.y - rect.top;
+      const x = Math.round((xRel * event.target.width) / rect.width);
+      const y = Math.round((yRel * event.target.height) / rect.height);
       this.painting = true;
       this.context.beginPath();
       if (this.mode === 'eraser') {
@@ -183,10 +211,35 @@ export default {
 
     onMouseMove(event) {
       event.preventDefault();
-      const x = event.touches[0].clientX - this.canvas.offsetLeft - 20;
-      const y = event.touches[0].clientY - this.canvas.offsetTop - 20;
+      let pos = { x: event.clientX, y: event.clientY };
+      if (event.touches) {
+        pos = { x: event.touches[0].clientX, y: event.touches[0].clientY };
+      }
+      const rect = event.target.getBoundingClientRect();
+      const xRel = pos.x - rect.left;
+      const yRel = pos.y - rect.top;
+      const x = Math.round((xRel * event.target.width) / rect.width);
+      const y = Math.round((yRel * event.target.height) / rect.height);
       this.context.lineTo(x, y);
       this.context.stroke();
+    },
+
+    countDownTimer() {
+      if (this.countDown > 0) {
+        setTimeout(() => {
+          this.countDown -= 1;
+          this.countDownTimer();
+        }, 1000);
+      }
+    },
+
+    countUpTimer() {
+      if (this.$router.history.current.name === 'Game') {
+        setTimeout(() => {
+          this.countUp = ((this.countUp * 10) + 1) / 10;
+          this.countUpTimer();
+        }, 100);
+      }
     },
   },
 };
