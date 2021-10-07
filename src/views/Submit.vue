@@ -67,7 +67,7 @@ export default {
       const data = this.$store.getters.getSubmitData;
       console.log(data, this.$store);
       try {
-        await this.$firebase.database().ref(`response/${this.$store.state.data.participantID}`).set(data);
+        await this.$firebase.database().ref(`response/${this.$store.state.data.childID}`).set(data);
       } catch (err) {
         console.log(err);
       } finally {
@@ -78,13 +78,13 @@ export default {
     goSurvey() {
       let url = '';
       if (this.condition === '1') {
-        url = 'https://forms.gle/';
+        url = 'https://forms.gle/29BJ89HFGnUZwbgf9';
       } else if (this.condition === '2') {
-        url = 'https://forms.gle/';
+        url = 'https://forms.gle/PdtfnmsTJ79mzobFA';
       } else if (this.condition === '3') {
-        url = 'https://forms.gle/';
+        url = 'https://forms.gle/xvYg3ZXboCpzsszD8';
       } else if (this.condition === '4') {
-        url = 'https://forms.gle/';
+        url = 'https://forms.gle/6CFrJ48drsJyiFL57';
       }
       window.open(url);
     },

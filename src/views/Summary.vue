@@ -10,15 +10,16 @@
     >
       <img
         :src="img"
-        style="object-fit:cover; height: 85vh"
+        style="object-fit:cover; height: 80vh"
       />
     </v-card-text>
 
     <v-card-actions>
       <v-btn
         v-if="!isPlaying && !isComplete"
+        style="position: fixed; top: 10px;"
         fab
-        @click="initAudio()"
+        @click="initAudio();"
       >
         ▶︎
       </v-btn>
@@ -26,7 +27,7 @@
         v-if="isComplete"
         outlined
         rounded
-        style="width: 20%; font-size: 30px; padding: 30px; margin-left: 120px"
+        style="position: fixed; bottom: 10px; width: 20%; font-size: 30px; padding: 30px;"
         color="primary"
         @click="submit"
       >
@@ -133,8 +134,10 @@ export default {
         this.playAudio('요약-선생님');
       } else if (this.condition === '2') {
         this.playAudio('요약-유아선생님');
-      } else if (this.condition === '3' || this.condition === '4') {
+      } else if (this.condition === '3') {
         this.playAudio('요약-유아');
+      } else if (this.condition === '4') {
+        this.playAudio('요약-유아2');
       }
     },
 
@@ -310,4 +313,5 @@ export default {
   line-height: 100px;
   text-align: center;
 }
+body * { touch-action: auto; }
 </style>

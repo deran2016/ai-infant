@@ -17,6 +17,7 @@
     <v-card-actions>
       <v-btn
         v-if="!isPlaying && !isComplete"
+        style="position: fixed; top: 10px;"
         fab
         @click="initAudio();"
       >
@@ -26,7 +27,7 @@
         v-if="isComplete"
         outlined
         rounded
-        style="width: 20%; font-size: 30px; padding: 30px; margin-left: 120px"
+        style="position: fixed; bottom: 10px; width: 20%; font-size: 30px; padding: 30px;"
         color="primary"
         @click="submit"
       >
@@ -224,9 +225,9 @@ export default {
               img = 1;
             } else if (currentTime > 38 && currentTime < 45) {
               img = 5;
-            } else if (currentTime > 45 && currentTime < 47) {
+            } else if (currentTime > 45 && currentTime < 50) {
               img = 6;
-            } else if (currentTime > 47 && currentTime < 54) {
+            } else if (currentTime > 50 && currentTime < 54) {
               img = 7;
             } else if (currentTime > 54 && currentTime < 64) {
               img = 9;
@@ -243,29 +244,29 @@ export default {
               this.isComplete = true;
             }
           } else if (this.condition === '2') {
-            if (currentTime > 0 && currentTime < 5) {
+            if (currentTime > 0 && currentTime < 4) {
               img = 1;
-            } else if (currentTime > 5 && currentTime < 11) {
+            } else if (currentTime > 4 && currentTime < 11) {
               img = 2;
-            } else if (currentTime > 11 && currentTime < 21) {
+            } else if (currentTime > 11 && currentTime < 20) {
               img = 3;
-            } else if (currentTime > 21 && currentTime < 30) {
+            } else if (currentTime > 20 && currentTime < 30) {
               img = 4;
             } else if (currentTime > 30 && currentTime < 39) {
               img = 1;
-            } else if (currentTime > 39 && currentTime < 45) {
+            } else if (currentTime > 39 && currentTime < 46) {
               img = 5;
-            } else if (currentTime > 45 && currentTime < 48) {
+            } else if (currentTime > 46 && currentTime < 49) {
               img = 6;
-            } else if (currentTime > 48 && currentTime < 55) {
+            } else if (currentTime > 49 && currentTime < 55) {
               img = 7;
             } else if (currentTime > 55 && currentTime < 65) {
               img = 9;
             } else if (currentTime > 65 && currentTime < 70) {
               img = 10;
-            } else if (currentTime > 70 && currentTime < 78) {
+            } else if (currentTime > 70 && currentTime < 79) {
               img = 11;
-            } else if (currentTime > 78 && currentTime < 86) {
+            } else if (currentTime > 79 && currentTime < 86) {
               img = 12;
             } else if (currentTime > 86 && currentTime < 88) {
               img = 13;

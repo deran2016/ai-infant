@@ -17,6 +17,7 @@
     <v-card-actions>
       <v-btn
         v-if="!isPlaying && !isComplete"
+        style="position: fixed; top: 10px;"
         fab
         @click="initAudio()"
       >
@@ -26,7 +27,7 @@
         v-if="isComplete"
         outlined
         rounded
-        style="width: 20%; font-size: 30px; padding: 30px; margin-left: 120px"
+        style="position: fixed; bottom: 10px; width: 20%; font-size: 30px; padding: 30px;"
         color="primary"
         @click="submit"
       >
@@ -223,25 +224,25 @@ export default {
               this.isComplete = true;
             }
           } else if (this.condition === '2') {
-            if (currentTime > 0 && currentTime < 4) {
+            if (currentTime > 0 && currentTime < 5) {
               img = 9;
-            } else if (currentTime > 4 && currentTime < 15) {
+            } else if (currentTime > 5 && currentTime < 16) {
               img = 1;
-            } else if (currentTime > 15 && currentTime < 24) {
+            } else if (currentTime > 16 && currentTime < 25) {
               img = 2;
-            } else if (currentTime > 24 && currentTime < 37) {
+            } else if (currentTime > 25 && currentTime < 38) {
               img = 3;
-            } else if (currentTime > 37 && currentTime < 45) {
+            } else if (currentTime > 38 && currentTime < 47) {
               img = 4;
-            } else if (currentTime > 45 && currentTime < 53) {
+            } else if (currentTime > 47 && currentTime < 55) {
               img = 5;
-            } else if (currentTime > 53 && currentTime < 59) {
+            } else if (currentTime > 55 && currentTime < 61) {
               img = 6;
-            } else if (currentTime > 59 && currentTime < 65) {
+            } else if (currentTime > 61 && currentTime < 67) {
               img = 7;
-            } else if (currentTime > 65 && currentTime < 75) {
+            } else if (currentTime > 67 && currentTime < 77) {
               img = 8;
-            } else if (currentTime > 75 && currentTime < 82) {
+            } else if (currentTime > 77 && currentTime < 82) {
               img = 10;
             } else if (currentTime > 82) {
               img = 10;

@@ -83,10 +83,9 @@
         </div>
         <v-btn
           color="primary"
-          :disabled="disabled"
           @click="submit"
         >
-          완성하기 {{ countDown > 0 ? `(${countDown})` : '' }}
+          다음
         </v-btn>
       </div>
     </v-card-text>
@@ -245,7 +244,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .row {
   display: flex;
   flex-direction: row;

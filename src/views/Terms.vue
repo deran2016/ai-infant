@@ -18,16 +18,16 @@
     <v-card-text>
       <v-text-field
         v-model="childID"
-        label="유아 이름"
+        label="유아 이름(ex. 이소영)"
       />
       <v-text-field
         v-model="childAge"
-        label="유아 나이"
+        label="유아 나이(ex. 6)"
         type="number"
       />
       <v-text-field
         v-model="parentID"
-        label="학습을 함께하시는 부모님 성함"
+        label="학습을 함께하시는 부모님 성함(ex. 송하연)"
       />
       <v-text-field
         v-model="parentPhone"

@@ -42,6 +42,11 @@ const routes = [
     component: () => import('../views/Quiz.vue'),
   },
   {
+    path: '/:preset/pre-game',
+    name: 'GameExplanation',
+    component: () => import('../views/GameExplanation.vue'),
+  },
+  {
     path: '/:preset/game',
     name: 'Game',
     component: () => import('../views/Game.vue'),

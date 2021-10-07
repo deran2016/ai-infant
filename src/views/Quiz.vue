@@ -210,7 +210,7 @@ export default {
 
     submit() {
       this.updateFields({ quizTime: this.countUp, quizfailCount: this.failCount });
-      this.$router.push({ name: 'Game' });
+      this.$router.push({ name: 'GameExplanation' });
     },
 
     initTeacherImg() {
@@ -383,10 +383,8 @@ export default {
       if (this.$router.history.current.name === 'Quiz') {
         setTimeout(() => {
           if (!this.countUp[`quiz${this.now + 1}`]) this.countUp[`quiz${this.now + 1}`] = 0;
-          // this.countUp[this.selectedImg] = ((this.countUp[this.selectedImg] * 10) + 1) / 10;
-          this.$set(this.countUp, this.now,
+          this.$set(this.countUp, `quiz${this.now + 1}`,
             ((this.countUp[`quiz${this.now + 1}`] * 10) + 1) / 10);
-          this.watched = Object.keys(this.countUp).length;
           this.countUpTimer();
         }, 100);
       }

@@ -1,10 +1,10 @@
 export default {
-  apiKey: 'AIzaSyApntDDVzLfHrR5wcxYqMhHFo7yhhYmak8',
-  authDomain: 'nst-art.firebaseapp.com',
-  databaseURL: 'https://nst-art-default-rtdb.asia-southeast1.firebasedatabase.app',
-  projectId: 'nst-art',
-  storageBucket: 'nst-art.appspot.com',
-  messagingSenderId: '269286505745',
-  appId: '1:269286505745:web:ac63727c9442ec66f320b0',
-  measurementId: 'G-2B8J3LB1MP',
+  apiKey: 'AIzaSyC_FhOIL0O8uqEfbm2qTst8y7dLgioyT_I',
+  authDomain: 'ai-infant.firebaseapp.com',
+  databaseURL: 'https://ai-infant-default-rtdb.asia-southeast1.firebasedatabase.app',
+  projectId: 'ai-infant',
+  storageBucket: 'ai-infant.appspot.com',
+  messagingSenderId: '1043009706175',
+  appId: '1:1043009706175:web:b42b08d07f18a8dd718e0a',
+  measurementId: 'G-MSPPKBFQ4Z',
 };
