@@ -17,6 +17,11 @@ const routes = [
     component: () => import('../views/Terms.vue'),
   },
   {
+    path: '/:preset/explain',
+    name: 'Explanation',
+    component: () => import('../views/Explanation.vue'),
+  },
+  {
     path: '/:preset/intro',
     name: 'Intro',
     component: () => import('../views/Intro.vue'),

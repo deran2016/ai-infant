@@ -52,7 +52,7 @@
             <img
               v-show="isImageType"
               :src="isImageType ? require(`@/assets/img/${item}`) : ''"
-              height="60"
+              height="90"
             />
           </v-btn>
         </div>
@@ -60,7 +60,7 @@
       <img
         class="quiz_img"
         :src="teacherImg"
-        height="185"
+        :height="isImageType ? '140' : '185'"
       />
     </v-card-text>
 
@@ -75,7 +75,8 @@
       <v-btn
         v-if="!isStarted && now"
         fab
-        @click="playAudio(file, () => {disabled = false})"
+        style="position: fixed; top: 10px;"
+        @click="playAudio(`${now + 1}번-${conditionString}`, () => {disabled = false})"
       >
         ▶︎
       </v-btn>
@@ -111,7 +112,6 @@ export default {
     isProblem: true,
     disabled: true,
     text: '',
-    now: 0,
     blind: true,
     correct: false,
     isComplete: false,
@@ -129,42 +129,42 @@ export default {
       answer: '물기',
       list: ['물기', '부기', '돌기'],
     }, {
+      problem: '얼음이 손에 달라 붙었다가 왜 금방 떨어질까?',
+      answer: '피부가 따뜻해서 얼음이 녹는다.',
+      list: ['피부가 차가워서 얼음이 떨어진다.', '피부가 따뜻해서 얼음이 녹는다.', '피부가 부드러워서 얼음이 떨어진다.'],
+    }, {
       problem: '우리나라 3살 나무의 나이테는 3개이다.',
       answer: '3개',
       list: ['1개', '3개', '5개'],
-    }, {
-      problem: '다음중 더운 곳에 사는 식물의 잎은?',
-      answer: '퀴즈3번1.png',
-      list: ['퀴즈3번1.png', '퀴즈3번2.png', '퀴즈3번3.png'],
     }, {
       problem: '열대지방의 나무들은 나이테가 어떻게 생겼을까?',
       answer: '없다',
       list: ['뾰족한 모양', '네모 모양', '없다'],
     }, {
-      problem: '얼음이 손에 달라 붙었다가 왜 금방 떨어질까?',
-      answer: '피부가 따뜻해서 얼음이 녹는다.',
-      list: ['피부가 차가워서 얼음이 떨어진다.', '피부가 따뜻해서 얼음이 녹는다.', '피부가 부드러워서 얼음이 떨어진다.'],
+      problem: '다음중 더운 곳에 사는 식물의 잎은?',
+      answer: '퀴즈3번1.png',
+      list: ['퀴즈3번1.png', '퀴즈3번2.png', '퀴즈3번3.png'],
     }],
     [{
       problem: '왜 붙었는지 너가 알려줄 수 있어?',
       answer: '물기 때문에',
       list: ['물기 때문에', '부기 때문에', '돌기 때문에'],
     }, {
+      problem: '얼음을 손으로 잡으면 손에 달라 붙었다가 왜 금방 떨어질까?',
+      answer: '피부가 따뜻해서 얼음이 녹는다.',
+      list: ['피부가 차가워서 얼음이 떨어진다.', '피부가 따뜻해서 얼음이 녹는다.', '피부가 부드러워서 얼음이 떨어진다.'],
+    }, {
       problem: '우리나라의 3살 짜리 나무는 나이테가 몇 개일까?',
       answer: '3개',
       list: ['1개', '3개', '5개'],
-    }, {
-      problem: '더운 곳에서 사는 식물을 알려줘!',
-      answer: '퀴즈3번1.png',
-      list: ['퀴즈3번1.png', '퀴즈3번2.png', '퀴즈3번3.png'],
     }, {
       problem: '날이 덥고 습한 열대지방은 항상 해가 쨍쨍하고 덥대. 나이테는 어떻게 생겼을까?',
       answer: '없다',
       list: ['뾰족한 모양', '네모 모양', '없다'],
     }, {
-      problem: '얼음을 손으로 잡으면 손에 달라 붙었다가 왜 금방 떨어질까?',
-      answer: '피부가 따뜻해서 얼음이 녹는다.',
-      list: ['피부가 차가워서 얼음이 떨어진다.', '피부가 따뜻해서 얼음이 녹는다.', '피부가 부드러워서 얼음이 떨어진다.'],
+      problem: '더운 곳에서 사는 식물을 알려줘!',
+      answer: '퀴즈3번1.png',
+      list: ['퀴즈3번1.png', '퀴즈3번2.png', '퀴즈3번3.png'],
     }]],
   }),
 
@@ -190,6 +190,20 @@ export default {
       }
       return num;
     },
+    now() {
+      return Number(this.$route.query.now) || 0;
+    },
+    conditionString() {
+      let str = '';
+      if (this.condition === '1') {
+        str = '선생님';
+      } else if (this.condition === '2') {
+        str = '유아선생님';
+      } else if (this.condition === '3' || this.condition === '4') {
+        str = '유아';
+      }
+      return str;
+    },
   },
 
   mounted() {
@@ -199,7 +213,9 @@ export default {
     }
     this.preloadImg();
     this.initTeacherImg();
-    this.initAudio();
+    if (this.now === 0) {
+      this.initAudio();
+    }
     this.countUpTimer();
   },
 
@@ -209,8 +225,15 @@ export default {
     ]),
 
     submit() {
-      this.updateFields({ quizTime: this.countUp, quizfailCount: this.failCount });
-      this.$router.push({ name: 'GameExplanation' });
+      this.updateFields(this.countUp);
+      this.updateFields(this.failCount);
+      if (this.now === 1) {
+        this.$router.push({ name: 'Experiment2' });
+      } else if (this.now === 3) {
+        this.$router.push({ name: 'Experiment3' });
+      } else if (this.now === 4) {
+        this.$router.push({ name: 'GameExplanation' });
+      }
     },
 
     initTeacherImg() {
@@ -294,8 +317,8 @@ export default {
           });
         }
       } else if (problem.answer !== item) {
-        if (!this.failCount[`quiz${this.now + 1}`]) this.failCount[`quiz${this.now + 1}`] = 0;
-        this.$set(this.failCount, `quiz${this.now + 1}`, this.failCount[`quiz${this.now + 1}`] + 1);
+        if (!this.failCount[`quiz${this.now + 1}Fail`]) this.failCount[`quiz${this.now + 1}Fail`] = 0;
+        this.$set(this.failCount, `quiz${this.now + 1}Fail`, this.failCount[`quiz${this.now + 1}Fail`] + 1);
         if (this.condition === '1') {
           this.playAudio('틀렸을 때-선생님', () => {
             this.disabled = false;
@@ -314,11 +337,13 @@ export default {
 
     next() {
       setTimeout(() => {
-        if (this.now + 1 < this.problems[this.selectProblem].length) {
+        if (this.now === 0 || this.now === 2) {
           this.blind = true;
           this.correct = false;
           this.isStarted = false;
-          this.now += 1;
+          this.updateFields(this.countUp);
+          this.updateFields(this.failCount);
+          this.$router.history.push({ name: 'Quiz', query: { now: this.now + 1 } });
           this.disabled = true;
           if (this.condition === '1') {
             this.playAudio(`${this.now + 1}번-선생님`, () => {
@@ -334,7 +359,7 @@ export default {
               this.disabled = false;
             });
           }
-        } else if (this.now + 1 === this.problems[this.selectProblem].length) {
+        } else if (this.now === 1 || this.now === 3 || this.now === 4) {
           this.isComplete = true;
         }
       }, 1000);
@@ -459,6 +484,7 @@ export default {
 
 .imgbtn {
   height: 60px !important;
+  margin: 30px
 }
 
 .v-btn:before {

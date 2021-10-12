@@ -67,7 +67,7 @@ export default {
       const data = this.$store.getters.getSubmitData;
       console.log(data, this.$store);
       try {
-        await this.$firebase.database().ref(`response/${this.$store.state.data.childID}`).set(data);
+        await this.$firebase.database().ref(`response/${this.$store.state.data.parentID}`).set(data);
       } catch (err) {
         console.log(err);
       } finally {

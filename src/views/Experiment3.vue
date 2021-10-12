@@ -140,7 +140,7 @@ export default {
 
   methods: {
     submit() {
-      this.$router.push({ name: 'Quiz' });
+      this.$router.push({ name: 'Quiz', query: { now: 4 } });
     },
 
     initImg() {

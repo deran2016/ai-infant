@@ -16,15 +16,9 @@
     </v-list-item>
 
     <v-card-text>
-      <v-text-field
-        v-model="childID"
-        label="유아 이름(ex. 이소영)"
-      />
-      <v-text-field
-        v-model="childAge"
-        label="유아 나이(ex. 6)"
-        type="number"
-      />
+      <div class="title text-center">
+        기프티콘 발송을 위해 정확한 정보를 입력 부탁드립니다.
+      </div>
       <v-text-field
         v-model="parentID"
         label="학습을 함께하시는 부모님 성함(ex. 송하연)"
@@ -62,9 +56,7 @@ export default {
 
   computed: {
     agreedAll() {
-      return (this.childID && this.childID.length >= 2)
-        && (this.childAge)
-        && (this.parentID && this.parentID.length >= 2)
+      return (this.parentID && this.parentID.length >= 2)
         && (this.parentPhone && this.parentPhone.length >= 8);
     },
   },
@@ -79,7 +71,7 @@ export default {
 
     submit() {
       this.updateFields(this.$data);
-      this.$router.push({ name: 'Intro' });
+      this.$router.push({ name: 'Explanation' });
     },
   },
 };
